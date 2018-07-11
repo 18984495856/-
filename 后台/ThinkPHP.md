@@ -33,3 +33,27 @@ php think migrate:run -t 20120103083322
 php think migrate:rollback
 ```
 
+##路由到操作方法
+
+**提高访问效率**
+
+路由地址的格式为：
+
+>  @[模块/控制器/]操作
+
+ 这种方式看起来似乎和第一种是一样的，本质的区别是直接执行某个控制器类的方法，而不需要去解析 模 块/控制器/操作这些，同时也不会去初始化模块。 例如，定义如下路由后：
+
+> 'blog/:id'=>'@index/blog/read'
+
+ 系统会直接执行
+
+> Loader::action('index/blog/read');
+
+ 相当于直接调用 \app\index\controller\blog类的read方法。
+
+ Blog类定义如下：
+
+> namespace app\index\controller; class Blog { public function read($id){ return 'read:'.$id; } } 
+
+通常这种方式下面，由于没有定义当前模块名、当前控制器名和当前方法名 ，从而导致视图的默认模板规 则失效，所以这种情况下面，如果使用了视图模板渲染，则必须传入明确的参数。 
+
